@@ -75,4 +75,14 @@ public class JdevtreinamentosController {
         return new ResponseEntity<Usuario>(usuarioAtualizado, HttpStatus.OK);
 
     }
+
+    @GetMapping(value = "buscarPorNome")
+    @ResponseBody
+    public ResponseEntity<List<Usuario>> buscarPorNome (@RequestParam (name = "nome") String nome) {
+
+        List<Usuario> usuario = usuarioRepository.buscarPorNome(nome.trim().toUpperCase());
+
+        return new ResponseEntity<List<Usuario>>(usuario, HttpStatus.OK);
+    
+    }
 }
