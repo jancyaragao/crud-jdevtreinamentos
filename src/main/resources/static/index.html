@@ -1,41 +1,93 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastrar Usuário</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+        integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
 </head>
+
 <body>
     <div class="container">
         <h1>Jdevtreinamentos</h1>
-        <form id="formUsuario">
+        <div class="d-md-flex justify-content-md-end">
+            <button type="button" class="btn btn-light mt-3 ms-1" id="buscar" data-bs-toggle="modal"
+                data-bs-target="#modalPesquisa">Buscar <i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+        <form id="formCadastra">
             <div class="form-group mt-2">
                 <label for="id">ID:</label>
-                <input type="number" class="form-control disabled" id="id" aria-describedby="id" placeholder="XX" disabled>
+                <input type="number" class="form-control disabled" id="id" aria-describedby="id" disabled>
             </div>
             <div class="form-group mt-2">
                 <label for="nome">Nome:</label>
-                <input type="text" class="form-control" id="nome" aria-describedby="nome" placeholder="Informe o nome do usuário">
+                <input type="text" class="form-control" id="nome" aria-describedby="nome"
+                    placeholder="Informe o nome do usuário">
             </div>
             <div class="form-group mt-2">
                 <label for="idade">Idade:</label>
                 <input type="number" class="form-control" id="idade" placeholder="Idade">
             </div>
             <div class="d-md-flex justify-content-md-end">
-                <button type="button" class="btn btn-secondary mt-3 me-1" id="limpar" onclick="limparForm()">Limpar</button>
-                <button type="button" class="btn btn-success mt-3 ms-1" id="salvar" onclick="salvarUsuario()">Salvar</button>
+                <button type="button" class="btn btn-secondary mt-3 me-1" id="limpar" onclick="limparForm()">Limpar <i
+                        class="fa-solid fa-broom"></i></button>
+                <button type="button" class="btn btn-success mt-3 ms-1" id="salvar" onclick="salvarUsuario()">Salvar <i
+                        class="fa-regular fa-floppy-disk"></i></button>
             </div>
         </form>
+
+        <div class="modal fade" id="modalPesquisa" tabindex="-1" aria-labelledby="modalPesquisaLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="modalPesquisaLabel">Buscar usuário</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="formPesquisa">
+                            <div class="mb-3">
+                                <label for="busca-nome" class="col-form-label">Nome:</label>
+                                <input type="text" class="form-control" id="busca-nome">
+                            </div>
+                        </form>
+                        <table class="table table-striped" id="listagemUsuario">
+                            <thead>
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Nome</th>
+                                    <th scope="col">Idade</th>
+                                    <th scope="col">Editar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" onclick="buscarUsuario()">Buscar <i
+                                class="fa-solid fa-magnifying-glass"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
-    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"
+        integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+
     <script>
-        
+
         function salvarUsuario() {
             id = $("#id").val();
             nome = $("#nome").val();
@@ -60,9 +112,31 @@
         }
 
         function limparForm() {
-            $("#formUsuario").trigger("reset");
+            $("#formCadastra").trigger("reset");
+        }
+
+        function buscarUsuario() {
+            busca_nome = $("#busca-nome").val();
+            console.log(busca_nome)
+            if (busca_nome != null && busca_nome.trim() != "") {
+                $.ajax({
+                    method: "GET",
+                    url: "usuario/buscarPorNome",
+                    data: "nome=" + busca_nome,
+                    contentType: "application/json; charset = utf-8",
+                    success: function (response) {
+                        $("#listagemUsuario > tbody > tr").remove();
+                        for (i = 0; i < response.length; i++) {
+                            $("#listagemUsuario > tbody").append("<tr><td>" + response[i].id + "</td><td>" + response[i].nome + "</td><td>" + response[i].idade + "</td><td><button type='button' class='btn' onclick='buscarUsuario()'><i class='fa-regular fa-pen-to-square'></i></button></td></tr>")
+                        }
+                    }
+                }).fail(function (xhr, status, errorThrown) {
+                    alert("Erro ao buscar usuário: " + xhr.responseText);
+                })
+            }
         }
 
     </script>
 </body>
+
 </html>
