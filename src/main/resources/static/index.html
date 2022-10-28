@@ -65,6 +65,7 @@
                                     <th scope="col">Nome</th>
                                     <th scope="col">Idade</th>
                                     <th scope="col">Editar</th>
+                                    <th scope="col">Deletar</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -93,6 +94,18 @@
             nome = $("#nome").val();
             idade = $("#idade").val();
 
+            if (nome == null || (nome != null && nome.trim() == "")) {
+                alert("Informe o nome do usuário");
+                $("#nome").focus();
+                return;
+            }
+
+            if (idade == null || (idade != null && idade.trim() == "")) {
+                alert("Informe a idade do usuário");
+                $("#idade").focus();
+                return;
+            }
+
             $.ajax({
                 method: "POST",
                 url: "usuario/salvar",
@@ -117,21 +130,53 @@
 
         function buscarUsuario() {
             busca_nome = $("#busca-nome").val();
-            console.log(busca_nome)
             if (busca_nome != null && busca_nome.trim() != "") {
                 $.ajax({
                     method: "GET",
                     url: "usuario/buscarPorNome",
                     data: "nome=" + busca_nome,
-                    contentType: "application/json; charset = utf-8",
                     success: function (response) {
                         $("#listagemUsuario > tbody > tr").remove();
                         for (i = 0; i < response.length; i++) {
-                            $("#listagemUsuario > tbody").append("<tr><td>" + response[i].id + "</td><td>" + response[i].nome + "</td><td>" + response[i].idade + "</td><td><button type='button' class='btn' onclick='buscarUsuario()'><i class='fa-regular fa-pen-to-square'></i></button></td></tr>")
+                            $("#listagemUsuario > tbody").append("<tr><td>" + response[i].id + "</td><td>" + response[i].nome + "</td><td>" + response[i].idade + "</td><td><button type='button' class='btn' onclick='editarUsuario(" + response[i].id + ")'><i class='fa-regular fa-pen-to-square'></i></button></td><td><button type='button' class='btn' onclick='deletarUsuario(" + response[i].id + ")'><i class='fa-regular fa-trash-can'></i></button></td></tr>")
                         }
                     }
                 }).fail(function (xhr, status, errorThrown) {
                     alert("Erro ao buscar usuário: " + xhr.responseText);
+                })
+            }
+        }
+
+        function editarUsuario(id) {
+            $.ajax({
+                method: "GET",
+                url: "usuario/buscarPorId",
+                data: "id=" + id,
+                success: function (response) {
+                    $("#id").val(response.id);
+                    $("#nome").val(response.nome);
+                    $("#idade").val(response.idade);
+
+                    $("#modalPesquisa").modal("hide");
+                }
+            }).fail(function (xhr, status, errorThrown) {
+                alert("Erro ao buscar usuário por ID: " + xhr.responseText);
+            })
+        }
+
+        function deletarUsuario(id) {
+            if (confirm("Deseja realmente deletar este usuário?")) {
+                $.ajax({
+                    method: "DELETE",
+                    url: "usuario/deletar",
+                    data: "id=" + id,
+                    success: function (response) {
+                        alert(response);
+
+                        buscarUsuario();
+                    }
+                }).fail(function (xhr, status, errorThrown) {
+                    alert("Erro ao deletar usuário por ID: " + xhr.responseText);
                 })
             }
         }
