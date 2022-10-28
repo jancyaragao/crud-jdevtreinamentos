@@ -24,7 +24,7 @@ public class JdevtreinamentosController {
 
     @Autowired /* Injeção de dependência */
     private UsuarioRepository usuarioRepository;
-    
+
     @GetMapping(value = "listar")
     @ResponseBody /* Retorna o dado para o corpo da resposta */
     public ResponseEntity<List<Usuario>> listar() {
@@ -32,22 +32,21 @@ public class JdevtreinamentosController {
         List<Usuario> usuarios = usuarioRepository.findAll(); /* Executa a consulta no banco de dados */
 
         return new ResponseEntity<List<Usuario>>(usuarios, HttpStatus.OK);
-
     }
 
     @PostMapping(value = "salvar") /* Mapeia a URL */
     @ResponseBody /* Descrição da resposta */
-    public ResponseEntity<Usuario> salvar (@RequestBody Usuario usuario) {
+    public ResponseEntity<Usuario> salvar(@RequestBody Usuario usuario) {
 
         Usuario novoUsuario = usuarioRepository.save(usuario);
-        
+
         return new ResponseEntity<Usuario>(novoUsuario, HttpStatus.CREATED);
     }
 
     @DeleteMapping(value = "deletar")
     @ResponseBody
-    public ResponseEntity<String> deletar (@RequestParam Long id) {
-        
+    public ResponseEntity<String> deletar(@RequestParam(name = "id") Long id) {
+
         usuarioRepository.deleteById(id);
 
         return new ResponseEntity<String>("Usuário removido!", HttpStatus.OK);
@@ -55,7 +54,7 @@ public class JdevtreinamentosController {
 
     @GetMapping(value = "buscarPorId")
     @ResponseBody
-    public ResponseEntity<Usuario> buscarPorId (@RequestParam (name = "id") Long id) {
+    public ResponseEntity<Usuario> buscarPorId(@RequestParam(name = "id") Long id) {
 
         Usuario usuario = usuarioRepository.findById(id).get();
 
@@ -64,25 +63,23 @@ public class JdevtreinamentosController {
 
     @PutMapping(value = "atualizar")
     @ResponseBody
-    public ResponseEntity<?> atualizar (@RequestBody Usuario usuario) {
+    public ResponseEntity<?> atualizar(@RequestBody Usuario usuario) {
 
         if (usuario.getId() == null) {
             return new ResponseEntity<String>("O ID do usuário não pode ser nulo", HttpStatus.OK);
-        } 
-        
+        }
+
         Usuario usuarioAtualizado = usuarioRepository.saveAndFlush(usuario);
 
         return new ResponseEntity<Usuario>(usuarioAtualizado, HttpStatus.OK);
-
     }
 
     @GetMapping(value = "buscarPorNome")
     @ResponseBody
-    public ResponseEntity<List<Usuario>> buscarPorNome (@RequestParam (name = "nome") String nome) {
+    public ResponseEntity<List<Usuario>> buscarPorNome(@RequestParam(name = "nome") String nome) {
 
         List<Usuario> usuario = usuarioRepository.buscarPorNome(nome.trim().toUpperCase());
 
         return new ResponseEntity<List<Usuario>>(usuario, HttpStatus.OK);
-    
     }
 }
